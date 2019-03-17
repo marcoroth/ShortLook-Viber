@@ -9,6 +9,7 @@
     NSString *iconsPath = [NSString stringWithFormat:@"%@/com.viber/ViberIcons", containerPath];
 
     NSString *senderMemberId = [notification.applicationUserInfo valueForKey:@"senderMemberId"];
+    NSString *imageName;
 
     const char *dbpath = [databasePath UTF8String];
     sqlite3 *_viberdb;
@@ -20,17 +21,20 @@
       if (sqlite3_prepare_v2(_viberdb, stmt, -1, &statement, NULL) == SQLITE_OK) {
         if (sqlite3_step(statement) == SQLITE_ROW) {
           const unsigned char *result = sqlite3_column_text(statement, 0);
-          NSString *imageName = [NSString stringWithUTF8String:(char *)result];
-          NSString *imageURL = [NSString stringWithFormat:@"%@/%@.jpg", iconsPath, imageName];
-          UIImage *image = [UIImage imageWithContentsOfFile:imageURL];
-
-          return [NSClassFromString(@"DDNotificationContactPhotoPromiseOffer") offerInstantlyResolvingPromiseWithPhotoIdentifier:imageURL image:image];
+          imageName = [NSString stringWithUTF8String:(char *)result];
         }
         sqlite3_finalize(statement);
       }
       sqlite3_close(_viberdb);
     }
 
-    return nil;
+    if (imageName) {
+      NSString *imageURL = [NSString stringWithFormat:@"%@/%@.jpg", iconsPath, imageName];
+      UIImage *image = [UIImage imageWithContentsOfFile:imageURL];
+
+      return [NSClassFromString(@"DDNotificationContactPhotoPromiseOffer") offerInstantlyResolvingPromiseWithPhotoIdentifier:imageURL image:image];
+    } else {
+      return nil;
+    }
   }
 @end
