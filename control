@@ -1,0 +1,9 @@
+Package: ch.marcoroth.shortlook.plugin.contact-photo.viber
+Name: Viber Profile Pictures for ShortLook
+Depends: mobilesubstrate, co.dynastic.ios.tweak.shortlook
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Show Viber users' profile pictures in ShortLook when you receive a Viber notification!
+Maintainer: Marco Roth
+Author: Marco Roth
+Section: Tweaks (ShortLook)
