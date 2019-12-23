@@ -8,14 +8,14 @@
     NSString *databasePath = [NSString stringWithFormat:@"%@/com.viber/database/Contacts.data", containerPath];
     NSString *iconsPath = [NSString stringWithFormat:@"%@/com.viber/ViberIcons", containerPath];
 
-    NSString *senderName = [notification.applicationUserInfo valueForKey:@"senderName"];
+    NSString *memberId = [notification.applicationUserInfo valueForKey:@"srcMid"];
     NSString *imageName;
 
     const char *dbpath = [databasePath UTF8String];
     sqlite3 *_viberdb;
 
     if (sqlite3_open(dbpath, &_viberdb) == SQLITE_OK) {
-      const char *stmt = [[NSString stringWithFormat:@"SELECT ZICONID FROM ZMEMBER WHERE ZDISPLAYFULLNAME = '%@' AND ZICONID IS NOT NULL;", senderName] UTF8String];
+      const char *stmt = [[NSString stringWithFormat:@"SELECT ZICONID FROM ZMEMBER WHERE ZMEMBERID = '%@' AND ZICONID IS NOT NULL;", memberId] UTF8String];
       sqlite3_stmt *statement;
 
       if (sqlite3_prepare_v2(_viberdb, stmt, -1, &statement, NULL) == SQLITE_OK) {
